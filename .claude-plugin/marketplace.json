@@ -1,0 +1,16 @@
+{
+  "name": "paranoid-sre",
+  "description": "The paranoid-sre skill for Claude Code: careful, production-safe infrastructure changes.",
+  "owner": {
+    "name": "Sandeep Komal",
+    "url": "https://github.com/SandeepKomal"
+  },
+  "plugins": [
+    {
+      "name": "paranoid-sre",
+      "source": "./",
+      "description": "Makes Claude check the environment, preview the change, find a way back and ask before touching infrastructure or data.",
+      "category": "devops"
+    }
+  ]
+}

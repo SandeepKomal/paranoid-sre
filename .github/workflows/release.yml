@@ -1,0 +1,45 @@
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check the skill
+        run: python3 scripts/check.py
+      - name: Check the version matches the tag
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          manifest=$(python3 -c 'import json; print(json.load(open(".claude-plugin/plugin.json"))["version"])')
+          if [ "$manifest" != "$version" ]; then
+            echo "plugin.json has version $manifest, tag is $GITHUB_REF_NAME" >&2
+            exit 1
+          fi
+      - name: Release notes from CHANGELOG.md
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          awk -v v="$version" '
+            $0 ~ "^## \\[" v "\\]" { found = 1; next }
+            found && /^## \[/ { exit }
+            found && /^\[[^]]+\]: / { exit }
+            found { print }
+          ' CHANGELOG.md > "$RUNNER_TEMP/notes.md"
+          if [ ! -s "$RUNNER_TEMP/notes.md" ]; then
+            echo "CHANGELOG.md has no section for $version" >&2
+            exit 1
+          fi
+      - name: Package the skill
+        run: |
+          cd skills
+          zip -r "$RUNNER_TEMP/paranoid.zip" paranoid
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" "$RUNNER_TEMP/paranoid.zip" --title "$GITHUB_REF_NAME" --notes-file "$RUNNER_TEMP/notes.md"

@@ -1,0 +1,14 @@
+{
+  "name": "paranoid-sre",
+  "displayName": "Paranoid SRE",
+  "version": "0.1.0",
+  "description": "Makes Claude check the environment, preview the change, find a way back and ask before touching infrastructure or data.",
+  "author": {
+    "name": "Sandeep Komal",
+    "url": "https://github.com/SandeepKomal"
+  },
+  "homepage": "https://github.com/SandeepKomal/paranoid-sre",
+  "repository": "https://github.com/SandeepKomal/paranoid-sre",
+  "license": "MIT",
+  "keywords": ["sre", "devops", "terraform", "kubernetes", "helm", "aws", "gcp", "azure", "safety", "infrastructure"]
+}
