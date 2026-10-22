@@ -108,6 +108,15 @@ approval, and blocks deletions in production. The skill uses
 | When it acts | While Claude plans | Just before a command runs |
 | Can Claude ignore it | It follows it like any instruction | No |
 
+To set up both:
+
+```bash
+go install github.com/sandeepkomal/blast-radius@latest   # or download a release
+blast-radius install
+claude plugin marketplace add SandeepKomal/paranoid-sre
+claude plugin install paranoid-sre@paranoid-sre
+```
+
 ## Limitations
 
 - It guides the agent; it does not enforce anything. Use blast-radius,
