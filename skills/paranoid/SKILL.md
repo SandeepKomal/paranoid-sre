@@ -148,6 +148,20 @@ tells you to go ahead, do it.
   into a script, or use another tool to do the same thing. Tell the user
   what was blocked and why, and let them decide.
 
+## Personal data and secrets
+
+- Look at personal data only as far as the task needs. Count rows
+  (`SELECT count(*)`) or select the columns you need with a `LIMIT`; do not
+  print whole tables of customer data.
+- Do not copy production personal data into other environments, local
+  files, tickets, commit messages or logs. Use masked or synthetic data.
+- Never print secrets or put them in a command you show: read them from the
+  environment or a secrets manager, and use the tool's own prompt for
+  passwords instead of `--password=...`.
+- Deleting personal data is irreversible and can be a legal obligation (an
+  erasure request) or a breach of one (a retention rule). Name it under
+  "Data loss" in step 6 and wait for a clear yes.
+
 ## When something goes wrong
 
 Stop changing things. Tell the user exactly which commands ran, what they
