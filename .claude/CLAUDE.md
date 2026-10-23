@@ -40,7 +40,9 @@ Scorecard.
 ## Releases
 
 1. Update `CHANGELOG.md` and the `version` in `.claude-plugin/plugin.json`.
-2. Merge to `main`, then push a tag `vX.Y.Z` matching that version.
+2. Merge to `main`, then either push a tag `vX.Y.Z` matching that version,
+   or run the **release** workflow from the Actions tab with the version
+   (`X.Y.Z`); it tags `main` itself once every check has passed.
 3. The release workflow checks the skill, packages `paranoid.zip`, writes
    `checksums.txt`, attests build provenance and publishes the release.
 
