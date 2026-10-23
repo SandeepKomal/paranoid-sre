@@ -3,6 +3,12 @@ name: release
 on:
   push:
     tags: ["v*"]
+  # "Run workflow" in the Actions tab: tags main as v<version> and releases it.
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release from main, without the v (for example 0.2.0)"
+        required: true
 
 permissions:
   contents: write
@@ -12,23 +18,38 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    # Manual releases only from main.
+    if: github.event_name == 'push' || github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
+      - name: Version to release (manual runs)
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "version must look like 1.2.3, got $VERSION" >&2
+            exit 1
+          fi
+          echo "TAG=v$VERSION" >> "$GITHUB_ENV"
+      - name: Tag from the push
+        if: github.event_name == 'push'
+        run: echo "TAG=$GITHUB_REF_NAME" >> "$GITHUB_ENV"
       - name: Check the skill
         run: python3 scripts/check.py
       - name: Check the version matches the tag
         run: |
-          version="${GITHUB_REF_NAME#v}"
+          version="${TAG#v}"
           manifest=$(python3 -c 'import json; print(json.load(open(".claude-plugin/plugin.json"))["version"])')
           if [ "$manifest" != "$version" ]; then
-            echo "plugin.json has version $manifest, tag is $GITHUB_REF_NAME" >&2
+            echo "plugin.json has version $manifest, tag is $TAG" >&2
             exit 1
           fi
       - name: Release notes from CHANGELOG.md
         run: |
-          version="${GITHUB_REF_NAME#v}"
+          version="${TAG#v}"
           awk -v v="$version" '
             $0 ~ "^## \\[" v "\\]" { found = 1; next }
             found && /^## \[/ { exit }
@@ -39,6 +60,15 @@ jobs:
             echo "CHANGELOG.md has no section for $version" >&2
             exit 1
           fi
+      # Created only after every check above passed, so a failed run leaves
+      # no tag behind.
+      - name: Create the tag (manual runs)
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/git/refs" -f ref="refs/tags/$TAG" -f sha="$GITHUB_SHA" >/dev/null
+          git tag "$TAG" "$GITHUB_SHA"
       - name: Package the skill
         run: |
           mkdir -p dist
@@ -53,4 +83,4 @@ jobs:
       - name: Publish
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" dist/paranoid.zip dist/checksums.txt --title "$GITHUB_REF_NAME" --notes-file "$RUNNER_TEMP/notes.md"
+        run: gh release create "$TAG" dist/paranoid.zip dist/checksums.txt --title "$TAG" --notes-file "$RUNNER_TEMP/notes.md"
