@@ -6,6 +6,16 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Security
+
+- The release workflow is read-only by default; only the release job can
+  write.
+- Claude Code for plugin validation is installed with `npm ci` from a
+  lockfile, so it is pinned by hash.
+- CI fuzzes `scripts/check.py` with Atheris (hash-pinned), seeded from real
+  SKILL.md files; the checker was split into testable functions.
+- Dependabot also updates the npm and pip pins.
+
 ## [0.2.0] - 2026-10-23
 
 ### Added

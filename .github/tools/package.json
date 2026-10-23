@@ -1,0 +1,8 @@
+{
+  "name": "paranoid-sre-ci-tools",
+  "private": true,
+  "description": "Tools CI uses to validate the plugin, pinned by package-lock.json. Dependabot keeps them current.",
+  "dependencies": {
+    "@anthropic-ai/claude-code": "2.1.308"
+  }
+}

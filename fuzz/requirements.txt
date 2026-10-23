@@ -1,0 +1,4 @@
+# Fuzzing dependency, pinned by hash (CI uses Python 3.12 on Linux x86_64).
+# Dependabot keeps it current.
+atheris==3.0.0 \
+    --hash=sha256:510e502c57b6dc615fb174066407af620d4c7f73cf08a782c86e7761bf12c4eb

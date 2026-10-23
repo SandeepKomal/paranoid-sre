@@ -45,6 +45,19 @@ able to make the instruction harder to miss. For hard limits, use
 - CI runs CodeQL, a gitleaks scan of the whole history, and OpenSSF
   Scorecard.
 
+## OpenSSF Scorecard
+
+[Scorecard](https://scorecard.dev/viewer/?uri=github.com/SandeepKomal/paranoid-sre)
+rates this repository's security practices weekly. What each check needs:
+
+| Check | Status |
+| --- | --- |
+| Token-Permissions, Pinned-Dependencies, Dangerous-Workflow, SAST, Fuzzing, Security-Policy, License, Dependency-Update-Tool, Signed-Releases, CI-Tests | Met in the repository itself. SAST and CI-Tests count recent commits, so they rise as new changes go through pull requests. |
+| Branch-Protection | A ruleset on `main` requiring pull requests, passing checks and no force pushes (repository settings). |
+| Code-Review | Pull requests approved by someone other than their author. |
+| Maintained | Activity over 90 days; the repository is new, so this clears on its own. |
+| CII-Best-Practices | The OpenSSF Best Practices badge at [bestpractices.dev](https://www.bestpractices.dev). |
+
 ## Supported versions
 
 Fixes go into the latest release. Please upgrade before reporting.

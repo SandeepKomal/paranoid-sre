@@ -1,0 +1,6 @@
+---
+name: Bad_Name claude
+description: <tag>
+version: 1
+  indented: x
+---

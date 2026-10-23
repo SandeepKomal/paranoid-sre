@@ -203,10 +203,12 @@ checklist; for the activity log blast-radius keeps, see
 
 - [x] **CodeQL** scans the workflows and scripts on every pull request and weekly.
 - [x] **gitleaks** scans the full git history for committed secrets in CI.
+- [x] **Atheris** fuzzes the skill checker's parsers on every pull request.
 - [x] **Dependabot** keeps the GitHub Actions up to date.
 - [x] **OpenSSF Scorecard** rates the supply-chain practices weekly (badge above).
-- [x] Every GitHub Action is pinned to a full commit SHA; workflows run with read-only tokens
-      by default and don't keep credentials in the checkout.
+- [x] Every GitHub Action is pinned to a full commit SHA, and CI tools are pinned by hash
+      (`package-lock.json`, `fuzz/requirements.txt`); workflows run with read-only tokens, only
+      the release job can write, and checkouts don't keep credentials.
 - [x] Releases publish `paranoid.zip` with `checksums.txt` and **signed build provenance**.
 
 Report security problems privately as described in [SECURITY.md](SECURITY.md).
