@@ -24,18 +24,19 @@ def test_one_input(data):
     text = fdp.ConsumeUnicodeNoSurrogates(8192)
 
     fields = check.frontmatter(text)
-    assert fields is None or all(isinstance(k, str) and isinstance(v, str) for k, v in fields.items())
+    if fields is not None and not all(isinstance(k, str) and isinstance(v, str) for k, v in fields.items()):
+        raise RuntimeError(f"frontmatter returned non-strings: {fields!r}")
 
     problems = check.skill_problems(text, directory)
-    assert all(isinstance(p, str) for p in problems)
+    if not all(isinstance(p, str) for p in problems):
+        raise RuntimeError(f"skill_problems returned non-strings: {problems!r}")
     # A file without frontmatter is always reported.
-    assert fields is not None or problems == ["no frontmatter at the top of the file"]
+    if fields is None and problems != ["no frontmatter at the top of the file"]:
+        raise RuntimeError(f"missing frontmatter not reported: {problems!r}")
 
     for target in check.relative_links(text):
-        assert target
-        assert not any(c.isspace() or c in ")#" for c in target)
-        assert not re.match(r"[a-z]+:", target)
-
+        if not target or any(c.isspace() or c in ")#" for c in target) or re.match(r"[a-z]+:", target):
+            raise RuntimeError(f"relative_links returned {target!r}")
 
 def main():
     atheris.Setup(sys.argv, test_one_input)
