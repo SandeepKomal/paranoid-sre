@@ -1,7 +1,7 @@
 {
   "name": "paranoid-sre",
   "displayName": "Paranoid SRE",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Makes Claude check the environment, preview the change, find a way back and ask before touching infrastructure or data.",
   "author": {
     "name": "Sandeep Komal",

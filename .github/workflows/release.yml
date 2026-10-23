@@ -6,12 +6,16 @@ on:
 
 permissions:
   contents: write
+  id-token: write
+  attestations: write
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
       - name: Check the skill
         run: python3 scripts/check.py
       - name: Check the version matches the tag
@@ -37,9 +41,16 @@ jobs:
           fi
       - name: Package the skill
         run: |
-          cd skills
-          zip -r "$RUNNER_TEMP/paranoid.zip" paranoid
+          mkdir -p dist
+          (cd skills && zip -r -X "../dist/paranoid.zip" paranoid)
+          (cd dist && sha256sum paranoid.zip > checksums.txt)
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4
+        with:
+          subject-path: |
+            dist/paranoid.zip
+            dist/checksums.txt
       - name: Publish
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" "$RUNNER_TEMP/paranoid.zip" --title "$GITHUB_REF_NAME" --notes-file "$RUNNER_TEMP/notes.md"
+        run: gh release create "$GITHUB_REF_NAME" dist/paranoid.zip dist/checksums.txt --title "$GITHUB_REF_NAME" --notes-file "$RUNNER_TEMP/notes.md"
