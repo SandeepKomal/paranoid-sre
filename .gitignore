@@ -1,0 +1,3 @@
+.github/tools/node_modules/
+crash-*
+__pycache__/

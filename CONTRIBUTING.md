@@ -21,6 +21,13 @@ python3 scripts/check.py            # frontmatter rules and links
 claude plugin validate . --strict   # plugin and marketplace manifests
 ```
 
+To fuzz the checker (Python 3.12 on Linux):
+
+```bash
+pip install --require-hashes --only-binary ":all:" -r fuzz/requirements.txt
+python fuzz/fuzz_check.py -max_total_time=60 fuzz/corpus
+```
+
 CI runs both on every pull request.
 
 ## Trying a change
