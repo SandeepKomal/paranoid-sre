@@ -6,9 +6,9 @@
 [![release](https://img.shields.io/github/v/release/SandeepKomal/paranoid-sre?sort=semver)](https://github.com/SandeepKomal/paranoid-sre/releases)
 [![license](https://img.shields.io/github/license/SandeepKomal/paranoid-sre)](LICENSE)
 
-**A Claude skill that makes your AI agent handle infrastructure like a careful SRE:** check
+**An agent skill that makes your AI agent handle infrastructure like a careful SRE:** check
 which environment it is in, preview the change, find a way back, and ask before anything it
-can't undo.
+can't undo. Works with Claude Code, Codex, Gemini CLI and GitHub Copilot CLI.
 
 Ask an agent to "clean up the old servers" and it will often just run the delete. With this
 skill it works through the steps an experienced engineer would, and comes back with something
@@ -147,7 +147,21 @@ cp -r paranoid-sre/skills/paranoid ~/.claude/skills/
 For everyone working in a repository, copy `skills/paranoid` to `.claude/skills/paranoid` in
 that repository and commit it.
 
-### Option 3: Claude.ai and the API
+### Option 3: Codex, Gemini CLI and GitHub Copilot CLI
+
+All three read skills from `~/.agents/skills`, so one copy serves them all:
+
+```bash
+git clone https://github.com/SandeepKomal/paranoid-sre
+mkdir -p ~/.agents/skills
+cp -r paranoid-sre/skills/paranoid ~/.agents/skills/
+```
+
+Check that each one sees it: `copilot skill list`, `gemini skills list`, or `/skills` in
+Codex. For one repository instead, copy `skills/paranoid` to `.agents/skills/paranoid` in that
+repository and commit it.
+
+### Option 4: Claude.ai and the API
 
 Each [release](https://github.com/SandeepKomal/paranoid-sre/releases) has a `paranoid.zip` you
 can upload as a skill in Claude.ai, or send to the
@@ -162,7 +176,7 @@ sha256sum -c checksums.txt
 
 ```bash
 go install github.com/sandeepkomal/blast-radius@latest   # or download a release
-blast-radius install
+blast-radius install          # Claude Code; add --agent codex, gemini or copilot for the others
 blast-radius init --user      # turns on the activity log the dashboard reads
 blast-radius ui               # http://127.0.0.1:7357
 ```
@@ -173,11 +187,11 @@ details.
 
 ## When it is used
 
-Claude loads the skill on its own when a task involves changing infrastructure or data:
+The agent loads the skill on its own when a task involves changing infrastructure or data:
 `terraform apply`, `kubectl delete`, `helm uninstall`, cloud CLI changes, migrations, `DROP`
 and `DELETE` statements, IAM, DNS and firewall changes, or requests to clean up, tear down,
-reset or fix an environment. You can also call it directly with `/paranoid-sre:paranoid` (or
-`/paranoid` when copied as a skill).
+reset or fix an environment. You can also call it directly: `/paranoid-sre:paranoid` in Claude
+Code with the plugin, `/paranoid` when copied as a skill, or `$paranoid` in Codex.
 
 ## Privacy and India's DPDP Act
 

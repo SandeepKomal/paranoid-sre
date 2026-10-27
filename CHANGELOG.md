@@ -6,6 +6,12 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- README: installing the skill for Codex, Gemini CLI and GitHub Copilot
+  CLI, which all read it from `~/.agents/skills`, and installing
+  blast-radius for those agents with `blast-radius install --agent`.
+
 ### Security
 
 - The release workflow is read-only by default; only the release job can
