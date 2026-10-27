@@ -4,10 +4,12 @@ Guidance for Claude (and other agents) working in this repository.
 
 ## What this is
 
-paranoid-sre is a Claude skill, `skills/paranoid/SKILL.md` plus reference
-pages, packaged as a Claude Code plugin. It makes an agent check where it is,
-preview, find a way back and ask before changing infrastructure or data. It
-pairs with [blast-radius](https://github.com/SandeepKomal/blast-radius), a
+paranoid-sre is an agent skill, `skills/paranoid/SKILL.md` plus reference
+pages, packaged as a Claude Code plugin. Codex, Gemini CLI and GitHub
+Copilot CLI load the same `SKILL.md` from `~/.agents/skills`, so keep the
+skill free of anything only one agent understands. It makes an agent check
+where it is, preview, find a way back and ask before changing
+infrastructure or data. It pairs with [blast-radius](https://github.com/SandeepKomal/blast-radius), a
 hook that enforces limits and whose dashboard shows this skill's steps.
 
 ## Checks

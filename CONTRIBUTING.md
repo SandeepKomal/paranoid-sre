@@ -38,4 +38,5 @@ cp -r skills/paranoid ~/.claude/skills/
 ```
 
 Then give Claude a task in a sandbox, for example "delete the old pods in
-this namespace", and check that it follows the steps.
+this namespace", and check that it follows the steps. To try it with Codex,
+Gemini CLI or Copilot CLI, copy it to `~/.agents/skills/` instead.
